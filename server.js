@@ -66,7 +66,7 @@ app.get('/setup', function(req,res){
 //get instance of router for api routes
 var apiRoutes = express.Router();
 
-// Step 1: route to authenticate user (POST /api/authenticate)
+// STEP 1: route to authenticate user (POST /api/authenticate)
 apiRoutes.post('/authenticate', function(req,res){
     // find the user
     User.findOne({name: req.body.name}, function(err, user){
@@ -79,24 +79,27 @@ apiRoutes.post('/authenticate', function(req,res){
         //if user doesn't exist...
         if(!user) {
             res.json({success: false, message:'Authentication failed. User not found.'});
+            console.log('User not found.');
         } else if (user) {
             //check if password matches
             if(user.password != req.body.password){
                 res.json({success: false, message: 'Authentication Failed. Wrong password.'});
-            }
-        } else {
-            //if user is found and password matches,
-            //CREATE A TOKEN.
-            var token = jwt.sign(user, app.get('superSecret'), {
-                expiresInMinutes:1440   //expires in 24 hours.
-            });
+                console.log('Wrong password.');
+            } else {
+                //if user is found and password matches,
+                //CREATE A TOKEN.
+                var token = jwt.sign(user, app.get('superSecret'), {
+                    expiresIn:"1d"  //new for latest version
+                });
 
-            //return information including token as JSON
-            res.json({
-                success: true,
-                message: 'Enjoy your token!',
-                token: token
-            });
+                //return information including token as JSON
+                res.json({
+                    success: true,
+                    message: 'Enjoy your token!',
+                    token: token
+                });
+
+            }
         }
     });
 });
@@ -104,8 +107,38 @@ apiRoutes.post('/authenticate', function(req,res){
 //NOTE, using mongoose to find the user, and JWT to create the token.
 
 
+// STEP 2: route middleware to verify token
+apiRoutes.use(function(req,res,next){
 
-// TODO: route middleware to verify token
+    //check header, url, or post parameters for token...
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+    //if there's a token, decode the sucka.
+    if(token){
+
+        //verifies secret and checks expiration
+        jwt.verify(token, app.get('superSecret'),function(err,decoded){
+            if(err){
+                return res.json({success: false, message: 'Failed to authenticate token.'});
+            } else {
+                //if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                next();     //move along.
+            }
+        });
+    } else {
+        //if there is no token,
+        //return an error.
+        return res.status(403).send({
+            success: false,
+            message: 'No token provided.'
+        });
+    }
+});
+
+
+
+// ======== default routes =========
 
 //route to show random message ( GET /api )
 apiRoutes.get('/', function(req, res){
@@ -114,7 +147,7 @@ apiRoutes.get('/', function(req, res){
     });
 });
 
-// route to return all users ( GET /api/users )
+// route to return all users ( GET /api/users ) (debug, add initial user)
 apiRoutes.get('/users', function(req, res){
     User.find({}, function(err, users){
         if(err) {
