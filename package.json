@@ -10,6 +10,7 @@
     "express-handlebars":"latest",
     "jquery":"latest",
     "bootstrap":"latest",
-    "node-uuid":"latest"
+    "node-uuid":"latest",
+    "colors":"latest"
   }
 }
