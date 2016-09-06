@@ -6,6 +6,11 @@
     "express": "^4.14.0",
     "jsonwebtoken": "^7.1.9",
     "mongoose": "^4.6.0",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "express-handlebars":"latest",
+    "jquery":"latest",
+    "bootstrap":"latest",
+    "node-uuid":"latest",
+    "colors":"latest"
   }
 }

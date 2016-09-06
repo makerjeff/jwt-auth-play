@@ -9,6 +9,8 @@ var app         = express();
 var bodyParser  = require('body-parser');
 var morgan      = require('morgan');
 var mongoose    = require('mongoose');
+var colors      = require('colors');
+var hbsModule   = require('express-handlebars');
 
 var jwt         = require('jsonwebtoken');
 var config      = require('./config');
@@ -23,12 +25,36 @@ var port = process.env.PORT || 3000;    //what port
 mongoose.connect(config.database);      //connects to db defined in config.js
 app.set('superSecret', config.secret);  //secret variable using setters
 
+// setup handlebars
+var handlebars = hbsModule.create({
+    defaultLayout:'main'
+});
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
+app.disable('x-powered-by');            //hide implementation details
+
 // use body parser to parse POST
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
+
+// ===========================
+// MongoDB events ============
+// ===========================
+
+mongoose.connection.on('error', function(err){
+    console.error(('connection error: ' + err).yellow); //catch the mongo connect error
+});
+
+mongoose.connection.on('connected', function(){
+    console.log('Database connected.'.blue);
+});
+
+mongoose.connection.on('disconnected', function(){
+    console.log('Database connection disconnected.'.red);
+});
 
 
 // ===========================
@@ -156,6 +182,11 @@ apiRoutes.get('/users', function(req, res){
             res.json(users);
         }
     });
+});
+
+apiRoutes.get('/data', function(req, res){
+    //TODO: injectify some data to pull.
+    //TODO: make it math value
 });
 
 //apply the routes to our application with prefix /api (JWXNOTE: this is cool!)
