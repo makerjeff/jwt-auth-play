@@ -61,6 +61,12 @@ mongoose.connection.on('disconnected', function(){
 // routes ====================
 // ===========================
 
+// in-file debug
+
+// app.get('/debug', function(req,res){
+//     res.render('debug', {title:'This is a working title.', bodyText:'this is a working body of text!'});
+// });
+
 // basic route
 app.get('/', function(req,res){
     res.send('Hello! The API is http://localhost' + port + '/api');
@@ -86,6 +92,10 @@ app.get('/setup', function(req,res){
         }
     });
 });
+
+// IMPORTED ROUTES -----------
+var debugRoutes = require('./routes/debug');
+app.use('/debug', debugRoutes); //use these routes, but under '/debug/<route>'
 
 // API ROUTES ----------------
 
@@ -190,9 +200,27 @@ apiRoutes.get('/data', function(req, res){
 });
 
 //apply the routes to our application with prefix /api (JWXNOTE: this is cool!)
+//also the default way to externalize API routes.
 app.use('/api', apiRoutes);
 
+// ====================================
+// CATCH-ALL MIDDLEWARE ===============
+// ====================================
 
+// serve static files
+app.use(express.static(__dirname + '/public'));
+
+// custom 404 page middleware
+app.use(function(req,res,next){
+    res.status(404);
+    res.json({status:404});
+});
+
+// custom 500 page middleware
+app.use(function(req,res,next){
+    res.status(500);
+    res.json({status:500});
+});
 
 
 // ===========================
