@@ -8,5 +8,7 @@ var UserSchema = mongoose.Schema({
     admin: Boolean
 });
 
-// export
+// mongoose methods here (bcrypt, etc)
+
+// export model
 module.exports = mongoose.model('User', UserSchema);
