@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RnD</title>
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/bootstrap.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="controllers">
+    <button id="uuid_button" class="btn btn-primary">uuid</button>
+    <button id="jwt_button" class="btn btn-success">jwt</button>
+
+</div>
+
+<div id="results">
+</div>
+
+<script>
+
+    //ready
+    $(document).ready(function(e){
+        console.log('document is ready.');
+        $('#results').html('<h3>document is ready.</h3>');
+
+        //buttons
+//        $('#uuid_button').on('click', function(e){
+//            console.log('"' + e.target.innerHTML + '"' + ' is working.');
+//        });
+//        $('#jwt_button').on('click', function(e){
+//            console.log('"' + e.target.innerHTML + '"' + ' is working.');
+//        });
+
+        //buttons with loop
+        $('button').on('click', function(e){
+            console.log('clicked ' + e.target.id + ' named: "' + e.target.innerHTML + '"');
+
+                $.ajax('/'+ e.target.innerHTML, {
+                    type: 'GET',
+                    success: function(data, status, jqXHR){
+                        $('#results').html('<h3>' + data + '</h3>');
+
+                        //if jwt button
+                        if(e.target.id == 'jwt_button'){
+                            //set cookie
+
+                        }
+
+                    },
+                    error: function(jqXHR, status, error){
+                        $('#results').html(error);
+                    }
+                });
+        });
+    });
+
+    window.addEventListener('DOMContentLoaded', function(e){
+        console.log('This should pop up before.');
+    });
+
+
+</script>
+
+</body>
+</html>
