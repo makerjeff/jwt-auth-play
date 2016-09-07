@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <!--set mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0 user-scalable=no">
+    <meta name="theme-color" content="#db5945">
+
+    <!--CSS STYLES-->
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+
+    <!--JS LIBRARIES-->
+    <script src="/lib/handlebars.min.js"></script>
+    <script src="/lib/jquery.js"></script>
+    <script src="/lib/bootstrap.js"></script>
+
+    <script>
+        //inject some dummy data
+        var dummyData = {
+            header: 'JWT-Auth-Play',
+            bodyText: 'This is a great day to be at work.'
+        };
+
+    </script>
+
+    <!--HBS TEMPLATES-->
+    <!--externalize these with AJAX-->
+    <script id="starterTemplate" type="text/x-handlebars-template">
+        <h1> Name: \{{header}}</h1>
+        <p> \{{bodyText}}</p>
+    </script>
+
+
+
+
+</head>
+<body>
+
+<div class="container">
+    <div>
+        {{{body}}}
+    </div>
+</div>
+
+</body>
+</html>
