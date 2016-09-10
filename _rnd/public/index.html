@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0 user-scalable=no">
+
     <title>RnD</title>
 
     <script src="lib/jquery.js"></script>
@@ -12,14 +14,18 @@
 </head>
 <body>
 
-<div id="controllers">
-    <button id="uuid_button" class="btn btn-primary">uuid</button>
-    <button id="jwt_button" class="btn btn-success">jwt</button>
+<div id="slide_01">
+    <div id="controllers">
+        <button id="uuid_button" class="btn btn-primary" data-buttonId="uuid">uuid</button>
+        <button id="jwt_button" class="btn btn-success" data-buttonId="jwt">jwt</button>
+        <button id="next_button" class="btn btn-sm" data-buttonId="next">></button>
+    </div>
+
+    <div id="results">
+    </div>
 
 </div>
 
-<div id="results">
-</div>
 
 <script>
 
@@ -40,15 +46,14 @@
         $('button').on('click', function(e){
             console.log('clicked ' + e.target.id + ' named: "' + e.target.innerHTML + '"');
 
-                $.ajax('/'+ e.target.innerHTML, {
+                $.ajax('/debugging/'+ e.target.getAttribute('data-buttonId'), {
                     type: 'GET',
                     success: function(data, status, jqXHR){
-                        $('#results').html('<h3>' + data + '</h3>');
+                        $('#results').html('<pre>' + data + '</pre>');
 
                         //if jwt button
                         if(e.target.id == 'jwt_button'){
                             //set cookie
-
                         }
 
                     },
