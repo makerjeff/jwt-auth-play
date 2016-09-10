@@ -12,6 +12,7 @@
     "bootstrap":"latest",
     "node-uuid":"latest",
     "colors":"latest",
-    "prompt":"latest"
+    "prompt":"latest",
+    "bcrypt-nodejs":"latest"
   }
 }
