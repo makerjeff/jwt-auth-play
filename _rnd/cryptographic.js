@@ -1,24 +1,33 @@
 //cryptographics.js
 //experimenting with cryptography.TODO: practice encrypting EVERYTHING.
 
-var crypto      = require('crypto');
-var prompt      = require('prompt');
-var colors      = require('colors');
-var bcrypt      = require('bcrypt-nodejs');
-var mongoose    = require('mongoose');
+// == MODULES ==
+var crypto              = require('crypto');
+var prompt              = require('prompt');
+var colors              = require('colors');
+var bcrypt              = require('bcrypt-nodejs');
+var mongodb             = require('mongodb');
 
-var algorithm   = 'aes-256-ctr';
-var password    = 'monkeypoo';
+// == DATABASE ==
+var MongoClient         = mongodb.MongoClient;
+var url                 = 'mongodb://localhost/cryptographic';
 
-var mode        = process.argv[2];
+
+// == CRYPTO ==
+var algorithm           = 'aes-256-ctr';
+var defaultPassword     = 'monkeypoodle';
+
+//application flow
+var mode                = process.argv[2];
 
 /**
  * Encrypt using Node.js crypto module.
  * @param textString Input text string.
+ * @param passwd Password you want to use to encrypt.
  * @returns {*} Returns encrypted string.
  */
-function encrypt(textString) {
-    var cipher = crypto.createCipher(algorithm, password);
+function encrypt(textString, passwd) {
+    var cipher = crypto.createCipher(algorithm, passwd);
     var crypted = cipher.update(textString, 'utf8', 'hex');
     crypted += cipher.final('hex');
     return crypted;
@@ -27,10 +36,11 @@ function encrypt(textString) {
 /**
  * Decrypt using Node.js crypto module.
  * @param textString    Text string to decrypt.
+ * @param passwd        Password used during encryption.
  * @returns {*}         Returns decrypted text string.
  */
-function decrypt(textString) {
-    var decipher = crypto.createDecipher(algorithm, password);
+function decrypt(textString, passwd) {
+    var decipher = crypto.createDecipher(algorithm, passwd);
     var dec = decipher.update(textString, 'hex','utf8');
     dec += decipher.final('utf8');
     return dec;
@@ -47,6 +57,11 @@ function bcryptHash(textString){
     });
 }
 
+/**
+ * Use Bcrypt to hash passwords (synchronously).
+ * @param textString    Input data to hash.
+ * @returns {*}         Returns Bcrypt-ed hash (to store in db).
+ */
 function bcryptHashSync(textString){
     return bcrypt.hashSync(textString);
 }
@@ -83,8 +98,8 @@ if(mode == 'ENCRYPT'){
         }
     ], function(err, result){
         console.log('Command line date received: ');
-        console.log('username: '.cyan + encrypt(result.username));
-        console.log('email: '.cyan + encrypt(result.email));
+        console.log('username: '.cyan + encrypt(result.username, result.password));
+        console.log('email: '.cyan + encrypt(result.email, result.password));
         console.log('password: '.cyan + bcryptHashSync(result.password));
     });
 
@@ -95,12 +110,50 @@ else if(mode == 'DECRYPT') {
         {name: 'hashies', description: 'Enter a hash: ', type: 'string'},
         {name: 'password', description: 'Enter your password: ', type: 'string', hidden: true}
     ], function(err, result){
-        if(result.password === password) {
-            console.log('Your result: ' + decrypt(result.hashies));
-        } else {
-            console.log('Password is incorrect.'.red);
-        }
+        //TODO: check database for password
+
+        return console.log(decrypt(result.hashies, result.password));
     });
+}
+
+else if(mode == 'STORE') {
+
+
+    prompt.get([
+        {name: 'username', description: 'Enter a username: ', type: 'string', required: true},
+        {name: 'email', description: 'Enter your email: ', type: 'string', required: true},
+        {name: 'password', description: 'Enter a password: ', type: 'string', hidden:true, required: true}
+    ], function(err, result){
+
+        //connect to db
+        MongoClient.connect(url, function(err, db){
+            if(err){
+                console.log('Unable to connect to the database. Error: ' + err);
+            } else {
+                console.log('Connection to ' + url.green + ' established.');
+
+                //store to db, then close DB.
+                var collection = db.collection('users');
+                var user = {
+                    username: encrypt(result.username, defaultPassword),
+                    email: encrypt(result.email, defaultPassword),
+                    password: bcryptHashSync(result.password)
+                };
+
+                collection.insert(user, function(err, result){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        console.log('Inserted ' + user + ' into database.' );
+                    }
+                });
+
+                db.close();
+            }
+        });
+
+    });
+
 }
 
 

@@ -14,6 +14,7 @@ Playing with JSON Web Tokens authorization.
 - [Mongoose Connection Best Practice](http://theholmesoffice.com/mongoose-connection-best-practice/)
 - [Node.JS encryption and decryption](http://lollyrock.com/articles/nodejs-encryption/)
 - [npm prompt](https://www.npmjs.com/package/prompt): Prompting made easy.
+- [MongoDB client](http://blog.modulus.io/mongodb-tutorial): For use without Express.
 
 ## NOTES
 - Basic Signup Flow:

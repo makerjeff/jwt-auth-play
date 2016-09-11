@@ -13,6 +13,7 @@
     "node-uuid":"latest",
     "colors":"latest",
     "prompt":"latest",
-    "bcrypt-nodejs":"latest"
+    "bcrypt-nodejs":"latest",
+    "mongodb": "latest"
   }
 }
