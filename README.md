@@ -2,6 +2,9 @@
 
 Playing with JSON Web Tokens authorization.
 
+## Notes
+- Adding a bare bones login system to "_rnd".
+
 ## Dependencies
 - JQuery
 - Bootstrap

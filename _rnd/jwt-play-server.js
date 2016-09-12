@@ -7,23 +7,15 @@ var jwt         = require('jsonwebtoken');
 var colors      = require('colors');
 var uuid        = require('node-uuid');
 var fs          = require('fs');
+var bodyParser  = require('body-parser');
+var mongoose    = require('mongoose');
 
 var app         = express();
-var data        = fs.readFileSync(__dirname + '/data.json');
-
-//crank out a UUID file
-//fs.writeFileSync(__dirname + '/uuid.txt', uuid.v4());
-
-var stringData  = data.toString();
-var parsedData  = JSON.parse(stringData);
-var secret      = parsedData.secret;
 var port        = process.env.PORT || 3000;
 
-// ===== DEBUG DATA =====
-console.log('Buffer: '.yellow);
-console.log(data);
-console.log('String: \n'.yellow + stringData);
-console.log('JSON: \n'.yellow + parsedData);
+
+
+
 
 // ==============================
 // MIDDLEWARE ===================
@@ -36,11 +28,9 @@ app.use(function(req, res, next){
 // ==============================
 // ROUTES =======================
 // ==============================
-// -- base route --
-app.get('/', function(req, res){
-    //res.send('<h1 style="color:darkgreen; font-family: Arial, sans-serif;"> / route is working.</h1>');
-    res.sendFile(__dirname + '/public/index.html');
-});
+
+
+
 
 // -- grab the secret phrase --
 app.get('/secret', function(req,res){
@@ -52,17 +42,16 @@ app.get('/secret', function(req,res){
     console.log('Sending object full of data.');
     res.send(secret);
 });
-
-// -- grab randomly generated uuid -- (TODO: turn into function)
-app.get('/uuid', function(req,res){
-    res.send(uuid.v4().toString());
+// -- base route --
+app.get('/', function(req, res){
+    //res.send('<h1 style="color:darkgreen; font-family: Arial, sans-serif;"> / route is working.</h1>');
+    res.sendFile(__dirname + '/public/index.html');
 });
 
-// -- jwt with data as payload
-app.get('/jwt', function(req,res){
-    var token = jwt.sign(stringData, secret, {algorithm:'HS256'});
-    res.json(token);
-});
+// == External routes ===========
+var debugRoutes = require('./routes/debug');
+app.use('/debugging', debugRoutes);
+
 
 // ==============================
 // CATCH-ALLS ===================
@@ -86,10 +75,6 @@ app.use(function(req,res,next){
 // START APP ====================
 // ==============================
 initialize();
-
-
-
-
 
 // ==============================
 // FUNCTION =====================
