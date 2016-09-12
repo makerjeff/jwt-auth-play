@@ -11,6 +11,9 @@
     "jquery":"latest",
     "bootstrap":"latest",
     "node-uuid":"latest",
-    "colors":"latest"
+    "colors":"latest",
+    "prompt":"latest",
+    "bcrypt-nodejs":"latest",
+    "mongodb": "latest"
   }
 }
