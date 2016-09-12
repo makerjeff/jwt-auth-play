@@ -135,8 +135,8 @@ else if(mode == 'STORE') {
                 //store to db, then close DB.
                 var collection = db.collection('users');
                 var user = {
-                    username: encrypt(result.username, defaultPassword),
-                    email: encrypt(result.email, defaultPassword),
+                    username: encrypt(result.username, defaultPassword),    //TODO: switch to result.passwd
+                    email: encrypt(result.email, defaultPassword),          //TODO: switch to result.passwd
                     password: bcryptHashSync(result.password)
                 };
 
