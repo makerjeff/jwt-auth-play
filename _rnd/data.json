@@ -1,3 +1,4 @@
 {
-    "secret":"onetwothreefourfive12345"
+    "secret":"onetwothreefourfive12345",
+    "database":"mongodb://"
 }

@@ -13,6 +13,8 @@ var mongoose    = require('mongoose');
 var app         = express();
 var port        = process.env.PORT || 3000;
 
+var sillyText   = require('./models/silly');
+
 
 
 
@@ -20,10 +22,24 @@ var port        = process.env.PORT || 3000;
 // ==============================
 // MIDDLEWARE ===================
 // ==============================
+
+// -- jeff logger --
 app.use(function(req, res, next){
     console.log('request: ' + req.url + ' : ' + Date().yellow);
     next();
 });
+
+// -- body parser --
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
+// -- disable stuff --
+//app.disable('x-powered-by');
+app.use(function(req,res,next){
+    res.setHeader('X-Powered-By', sillyText.getEngine());
+    next();
+});
+
 
 // ==============================
 // ROUTES =======================
@@ -48,9 +64,22 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/public/index.html');
 });
 
+// -- login route --
+
+app.get('/login', function(req,res){
+    res.sendFile(__dirname + '/public/login.html');
+});
+
+// -- dummy post route --
+app.post('/login', function(req,res){
+
+});
+
+
 // == External routes ===========
 var debugRoutes = require('./routes/debug');
 app.use('/debugging', debugRoutes);
+
 
 
 // ==============================
