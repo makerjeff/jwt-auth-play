@@ -18,6 +18,7 @@ Playing with JSON Web Tokens authorization.
 - [Node.JS encryption and decryption](http://lollyrock.com/articles/nodejs-encryption/)
 - [npm prompt](https://www.npmjs.com/package/prompt): Prompting made easy.
 - [MongoDB client](http://blog.modulus.io/mongodb-tutorial): For use without Express.
+= [NPM Cookie-Parser](https://www.npmjs.com/package/cookie-parser): Use me.
 
 ## NOTES
 - **Basic Signup Flow**:
@@ -37,9 +38,10 @@ Playing with JSON Web Tokens authorization.
                 - if password matches,
                     - create token with: user object, secret, {expiresIn:"1h"} (options object)
                     - respond with json object {success: true, message: '<congrats message>', token: <token>};
-    - Store token in local storage or cookie header
+    - Store token in <s>local storage  or </s> **cookie header**
     - create middleware to protect specific routes (server):
         - create token polyfill (header, url param, or post param);
+        - use 
         - if token exists,
             - check token with jwt.verify(token, secret, callback(err,decoded){});
                 - if error, return json object {success: false, message: 'Failed to authenticate.'};
