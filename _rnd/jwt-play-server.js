@@ -64,13 +64,13 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/public/index.html');
 });
 
-// -- login route --
+// -- login GET route --
 
 app.get('/login', function(req,res){
     res.sendFile(__dirname + '/public/login.html');
 });
 
-// -- dummy post route --
+// -- login POST route --
 app.post('/login', function(req,res){
 
 });
