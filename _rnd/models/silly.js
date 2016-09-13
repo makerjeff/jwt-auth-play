@@ -10,7 +10,9 @@ var sillyLibrary = [
     'Nuclear Engine',
     'Probability Engine',
     'Warp Drive',
-    'Hyperspace Drive'
+    'Hyperspace Drive',
+    'Monkey Turd Machine v0.1',
+    'Canned-soup with meatballs'
 ];
 
 
