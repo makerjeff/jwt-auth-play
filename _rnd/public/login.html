@@ -28,7 +28,9 @@
             <input type="password" class="form-control" id="pwd" placeholder="please enter a password" required>
         </div>
 
-        <button type="submit" class="btn btn-default">Submit</button>
+        <br>
+
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
 
     </form>
 </div>
@@ -43,8 +45,21 @@
         $('#form1').on('submit', function(e){
             e.preventDefault(); //restricts form submission
 
-            //ajax
-            $.ajax('/debugging/jwt', {type: 'POST'})
+            var emailField = $('#email').value;
+            var pwdField = $('#pwd').value;
+
+            //TODO: AJAX to check if a user exists
+            $.ajax('/db-tester', {
+                type: 'GET',
+                success:function(data, status, jqXHR){
+
+                    updatePage(data);
+                },
+                error: function(jqXHR, status, error){
+                    console.log('error! ' + Error(error));
+
+                }
+            });
         });
 
 
@@ -53,6 +68,18 @@
     window.addEventListener('DOMContentLoaded', function(e){
         console.log('This should pop up before anything else.');
     });
+
+    // FUNCTIONS
+    // TODO: move this to external JS file.
+
+    function updatePage(data){
+        $('.container').html('<h1>User logged in!</h1>' + '<p>' + data.username + '</p>');
+
+        data.data.forEach(function(elem, arr, ind){
+            console.log(elem.data);
+            $('.container').append('<p> <span class="fa fa-sign-in"></span> ' + elem.data + '</p>');
+        });
+    }
 
 
 </script>

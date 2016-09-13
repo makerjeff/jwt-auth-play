@@ -18,7 +18,8 @@ Playing with JSON Web Tokens authorization.
 - [Node.JS encryption and decryption](http://lollyrock.com/articles/nodejs-encryption/)
 - [npm prompt](https://www.npmjs.com/package/prompt): Prompting made easy.
 - [MongoDB client](http://blog.modulus.io/mongodb-tutorial): For use without Express.
-= [NPM Cookie-Parser](https://www.npmjs.com/package/cookie-parser): Use me.
+- [NPM Cookie-Parser](https://www.npmjs.com/package/cookie-parser): Use me.
+- [MongoDB Reference](https://docs.mongodb.com/manual/reference/method/db.createCollection/)
 
 ## NOTES
 - **Basic Signup Flow**:

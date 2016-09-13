@@ -2,19 +2,26 @@
  * Created by jeffersonwu on 9/7/16.
  */
 
-var express     = require('express');
-var jwt         = require('jsonwebtoken');
-var colors      = require('colors');
-var uuid        = require('node-uuid');
-var fs          = require('fs');
-var bodyParser  = require('body-parser');
-var mongoose    = require('mongoose');
+var express         = require('express');
+var jwt             = require('jsonwebtoken');
+var colors          = require('colors');
+var uuid            = require('node-uuid');
+var fs              = require('fs');
+var bodyParser      = require('body-parser');
+var cookieParser    = require('cookie-parser');
+var mongoose        = require('mongoose');
 
-var app         = express();
-var port        = process.env.PORT || 3000;
+var app             = express();
+var port            = process.env.PORT || 3000;
 
-var sillyText   = require('./models/silly');
 
+// ==============================
+// SETUP ========================
+// ==============================
+
+var User            = require('./models/users');    //user schema
+var sillyText       = require('./models/silly');    //sillyEngines schema
+var data            = fs.readFileSync(__dirname + '/data.json');
 
 
 
@@ -33,6 +40,9 @@ app.use(function(req, res, next){
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+// -- cookie parser --
+app.use(cookieParser());
+
 // -- disable stuff --
 //app.disable('x-powered-by');
 app.use(function(req,res,next){
@@ -45,18 +55,21 @@ app.use(function(req,res,next){
 // ROUTES =======================
 // ==============================
 
-
+// == External routes ===========
+var debugRoutes = require('./routes/debug');
+app.use('/debugging', debugRoutes);
 
 
 // -- grab the secret phrase --
 app.get('/secret', function(req,res){
     var sendObject = [
-        {'buffer':data},
-        {'string':stringData},
-        {'json':parsedData}
+        {'buffer':debugRoutes.data},
+        {'string':debugRoutes.stringData},
+        {'json':debugRoutes.parsedData},
+        {'secret':debugRoutes.secret}
     ];
     console.log('Sending object full of data.');
-    res.send(secret);
+    res.json(JSON.parse(data));
 });
 // -- base route --
 app.get('/', function(req, res){
@@ -72,13 +85,30 @@ app.get('/login', function(req,res){
 
 // -- login POST route --
 app.post('/login', function(req,res){
+    //check to see if user exists.
+
+});
+
+// -- DB TESTER ROUTER --
+app.get('/db-tester', function(req,res){
+    //grab user's cookies and display them
+    //res.json(req.cookies);
+    console.log('data sent: ' + req.cookies.data);
+
+    var dummyData = {'username':'jimbop@gmail.com', 'data': [
+        {'name':'note1', 'data':'I am wonderful. How is that for a note?'},
+        {'name':'note2', 'data':'I am also pretty awesome.'},
+        {'name':'note3', 'data':'That\'s the last time I leave my window open for intruders.'}
+    ]};
+
+    res.json(dummyData);
+});
+
+app.post('/db-tester', function(req,res){
 
 });
 
 
-// == External routes ===========
-var debugRoutes = require('./routes/debug');
-app.use('/debugging', debugRoutes);
 
 
 
@@ -106,7 +136,7 @@ app.use(function(req,res,next){
 initialize();
 
 // ==============================
-// FUNCTION =====================
+// FUNCTIONS ====================
 // ==============================
 function initialize(){
     app.listen(port);

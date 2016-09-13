@@ -9,12 +9,16 @@ var mongoose = require('mongoose');
 
 //define schema
 var userSchema = mongoose.Schema({
-    username: String,
     email: String,
     password: String
 });
 
 // schema methods
+//TODO: bcrypt hash password
+//TODO: bcrypt verify password
+
+//TODO: encrypt data
+//TODO: decrypt data
 
 // create model
 var User = mongoose.model('User', userSchema);

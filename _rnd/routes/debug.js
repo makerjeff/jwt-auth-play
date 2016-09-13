@@ -14,15 +14,16 @@ var data        = fs.readFileSync(__dirname + '/../data.json');
 //crank out a UUID file
 //fs.writeFileSync(__dirname + '/uuid.txt', uuid.v4());
 
+// LEGACY, but good for reference.
 var stringData  = data.toString();
 var parsedData  = JSON.parse(stringData);
 var secret      = parsedData.secret;
-
-// ===== DEBUG DATA =====
-console.log('Buffer: '.yellow);
-console.log(data);
-console.log('String: \n'.yellow + stringData);
-console.log('JSON: \n'.yellow + parsedData);
+//
+// // ===== DEBUG DATA =====
+// console.log('Buffer: '.yellow);
+// console.log(data);
+// console.log('String: \n'.yellow + stringData);
+// console.log('JSON: \n'.yellow + parsedData);
 
 
 // -- grab randomly generated uuid -- (TODO: turn into function)
@@ -41,4 +42,8 @@ router.get('/next', function(req,res){
 });
 
 
-module.exports = router;
+module.exports          = router;
+exports.data            = data;
+exports.stringData      = stringData;
+exports.parsedData      = parsedData;
+exports.secret          = secret;
