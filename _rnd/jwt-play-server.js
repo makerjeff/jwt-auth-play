@@ -98,7 +98,8 @@ app.get('/db-tester', function(req,res){
     var dummyData = {'username':'jimbop@gmail.com', 'data': [
         {'name':'note1', 'data':'I am wonderful. How is that for a note?'},
         {'name':'note2', 'data':'I am also pretty awesome.'},
-        {'name':'note3', 'data':'That\'s the last time I leave my window open for intruders.'}
+        {'name':'note3', 'data':'That\'s the last time I leave my window open for intruders.'},
+        {'name':'note4', 'data':'Without protecting this route, it\'s equivalent to bending over and spreading my cheeks.'}
     ]};
 
     res.json(dummyData);

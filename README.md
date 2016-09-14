@@ -20,6 +20,8 @@ Playing with JSON Web Tokens authorization.
 - [MongoDB client](http://blog.modulus.io/mongodb-tutorial): For use without Express.
 - [NPM Cookie-Parser](https://www.npmjs.com/package/cookie-parser): Use me.
 - [MongoDB Reference](https://docs.mongodb.com/manual/reference/method/db.createCollection/)
+- [How Timestamps help in preventing 'Replay Attacks'](http://stackoverflow.com/questions/10022053/how-does-timestamp-helps-in-preventing-replay-attacks-in-webservices): Consider implementing this.
+- [REST Securit CheatSheet](https://www.owasp.org/index.php/REST_Security_Cheat_Sheet): READ AS BIBLE.
 
 ## NOTES
 - **Basic Signup Flow**:
