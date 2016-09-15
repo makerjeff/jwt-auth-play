@@ -77,18 +77,35 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/public/index.html');
 });
 
-// -- login GET route --
+// ======================
+// SIGNUP ===============
+// ======================
+// -- GET -- load the page
+app.get('/signup', function(req,res){
+    //TODO: if token exists, redirect to data-page (or alert front end)
+    res.sendFile(__dirname + '/public/signup.html');
+
+});
+
+// ======================
+// LOGIN ================
+// ======================
+// -- GET -- returns page
 
 app.get('/login', function(req,res){
     res.sendFile(__dirname + '/public/login.html');
 });
 
-// -- login POST route --
+// -- POST -- verify
 app.post('/login', function(req,res){
     //check to see if user exists.
 
 });
 
+
+// =======================
+// TEST ROUTES ===========
+// =======================
 // -- DB TESTER ROUTER --
 app.get('/db-tester', routeMiddleware, function(req,res){
     //grab user's cookies and display them
@@ -109,28 +126,7 @@ app.post('/db-tester', function(req,res){
 
 });
 
-// -- DB tester-ware --
-function routeMiddleware(req, res, next){
-// functions as a gateway. If token doesn't exist, thou shall not pass.
-    //
-    if(!req.cookies.data) {
-        console.log('no cookie present.');
-        return res.json({message: 'You\'re a lying cheating bastard. You didn\'t come with authorized cookies. '});
-    } else {
-        console.log('this is working. Use this to check for credentials. ' + req.cookies.data);
-        return next();
-    }
 
-}
-
-
-// ---- official isAuthenticated route ----
-// use this for API calls that require authentication.
-function isAuthenticated(req,res,next) {
-    //... check req.cookies for token
-    //... check DB for user in that token
-    //... check 
-}
 
 
 
@@ -166,5 +162,24 @@ function initialize(){
     console.log('Magic happening on localhost:' + port);
 }
 
+// -- DB tester-ware --
+function routeMiddleware(req, res, next){
+// functions as a gateway. If token doesn't exist, thou shall not pass.
+    //
+    if(!req.cookies.data) {
+        console.log('no cookie present.');
+        return res.json({message: 'You\'re a lying cheating bastard. You didn\'t come with authorized cookies. '});
+    } else {
+        console.log('this is working. Use this to check for credentials. ' + req.cookies.data);
+        return next();
+    }
+}
 
 
+// ---- official isAuthenticated route ----
+// use this for API calls that require authentication.
+function isAuthenticated(req,res,next) {
+    //... check req.cookies for token
+    //... check DB for user in that token
+    //... check
+}

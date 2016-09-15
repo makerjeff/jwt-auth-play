@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0 user-scalable=no">
+
+    <title>rnd signup</title>
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/bootstrap.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1><span class="fa fa-user-plus"></span> Sign up</h1>
+    <form id="signup_form" action="https://52.35.91.192">
+        <div class="form-group">
+            <label for="email"> Email: </label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="pwd">Password: </label>
+            <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Enter password" required>
+        </div>
+
+        <div class="form-group">
+            <input type="password" class="form-control" id="confirm_pwd" name="confirm_pwd" placeholder="Confirm password" required>
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+
+    </form>
+
+    <br>
+    <div class="text-center"><a href="/login">Already have an account? Log in!</a></div>
+</div>
+
+
+<script>
+
+
+
+    //DOC READY
+    $(document).ready(function(e){
+
+        //NOTE, JQuery creates an array, not a direct reference to the object.
+        var password = $('#pwd');
+        var confirm_password = $('#confirm_pwd');
+
+
+        $('#signup_form').on('submit', function(e){
+            e.preventDefault();
+            console.log('submit attempted!');
+            //validatePassword();
+        });
+
+        password.on('change', validatePassword);
+        confirm_password.on('keyup', validatePassword);
+
+
+
+        // DECLARE FUNCTIONS FUNCTIONS
+        function validatePassword(){
+            if(password[0].value != confirm_password[0].value){
+                confirm_password[0].setCustomValidity("Passwords don't match!");
+            } else {
+               confirm_password[0].setCustomValidity("");
+                console.log('password matches, ready to send to API!');
+            }
+        }
+    });
+
+
+
+
+
+
+</script>
+
+</body>
+</html>
