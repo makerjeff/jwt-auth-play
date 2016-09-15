@@ -90,7 +90,7 @@ app.post('/login', function(req,res){
 });
 
 // -- DB TESTER ROUTER --
-app.get('/db-tester', function(req,res){
+app.get('/db-tester', routeMiddleware, function(req,res){
     //grab user's cookies and display them
     //res.json(req.cookies);
     console.log('data sent: ' + req.cookies.data);
@@ -109,6 +109,28 @@ app.post('/db-tester', function(req,res){
 
 });
 
+// -- DB tester-ware --
+function routeMiddleware(req, res, next){
+// functions as a gateway. If token doesn't exist, thou shall not pass.
+    //
+    if(!req.cookies.data) {
+        console.log('no cookie present.');
+        return res.json({message: 'You\'re a lying cheating bastard. You didn\'t come with authorized cookies. '});
+    } else {
+        console.log('this is working. Use this to check for credentials. ' + req.cookies.data);
+        return next();
+    }
+
+}
+
+
+// ---- official isAuthenticated route ----
+// use this for API calls that require authentication.
+function isAuthenticated(req,res,next) {
+    //... check req.cookies for token
+    //... check DB for user in that token
+    //... check 
+}
 
 
 

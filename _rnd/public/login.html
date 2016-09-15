@@ -33,6 +33,9 @@
         <button type="submit" class="btn btn-primary btn-block">Submit</button>
 
     </form>
+
+    <br>
+    <div class="text-center"><a href="/signup">Don't have an account? Sign Up!</a></div>
 </div>
 
 
@@ -71,14 +74,27 @@
 
     // FUNCTIONS
     // TODO: move this to external JS file, AND FOR THE LIFE OF PI, USE TEMPLATING!
+    // DO NOT USE .innerHTML.  Instead, use .innerText, .value, .textContent.
 
+    // temporary page-updater, pre-populated with non-Handlebars code.
     function updatePage(data){
-        $('.container').html('<h1>User logged in!</h1>' + '<p>' + data.username + '</p>');
 
-        data.data.forEach(function(elem, arr, ind){
-            console.log(elem.data);
-            $('.container').append('<p> <span class="fa fa-sign-in"></span> ' + elem.data + '</p>');
-        });
+        if(data.message){
+            $('.container').html('<h1>' + data.message + '</h1>');
+        } else {
+
+            $('.container').html('<h1>User logged in!</h1>' + '<p>' + data.username + '</p>');
+
+            data.data.forEach(function(elem, arr, ind){
+                console.log(elem.data);
+                $('.container').append('<p> <span class="fa fa-sign-in"></span> ' + elem.data + '</p>');
+            });
+        }
+    }
+
+    function injectCookie(){
+        //set the cookie
+        document.cookie = 'data={' + data.data + '}';
     }
 
 

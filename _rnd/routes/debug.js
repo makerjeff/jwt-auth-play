@@ -18,13 +18,6 @@ var data        = fs.readFileSync(__dirname + '/../data.json');
 var stringData  = data.toString();
 var parsedData  = JSON.parse(stringData);
 var secret      = parsedData.secret;
-//
-// // ===== DEBUG DATA =====
-// console.log('Buffer: '.yellow);
-// console.log(data);
-// console.log('String: \n'.yellow + stringData);
-// console.log('JSON: \n'.yellow + parsedData);
-
 
 // -- grab randomly generated uuid -- (TODO: turn into function)
 router.get('/uuid', function(req,res){
@@ -33,7 +26,7 @@ router.get('/uuid', function(req,res){
 
 // -- jwt with data as payload
 router.get('/jwt', function(req,res){
-    var token = jwt.sign(stringData, secret, {algorithm:'HS256'});
+    var token = jwt.sign(stringData, secret, {algorithm:'HS256', expiresIn: '5m'});
     res.json(token);
 });
 
