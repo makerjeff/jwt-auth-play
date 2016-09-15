@@ -46,5 +46,15 @@ router.get('/consumecookie', function(req,res){
     res.send('Your session token: <pre> ' + req.signedCookies.token + '</pre>');
 });
 
+// -- delete cookie token --
+router.get('/deletecookie', function(req,res){
+    console.log('Deleting session token');
+    res.clearCookie('token');
+    res.redirect('/login');
+});
 
-module.exports          = router;
+
+// ==================
+// EXPORT MODULE ====
+// ==================
+module.exports = router;
