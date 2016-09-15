@@ -48,11 +48,15 @@
 
         //buttons with loop
         $('button').on('click', function(e){
-            console.log('clicked ' + e.target.id + ' named: "' + e.target.innerHTML + '"');
+            //console.log('clicked ' + e.target.id + ' named: "' + e.target.innerHTML + '"');
 
                 //check for 'login' button
-                if(e.target.id == 'login_button') {
-                    window.location.href="/login";
+                if(e.target.id === 'login_button') {
+                    return window.location.href="/login";
+                }
+                else if(e.target.id === 'cookie_injector'){
+                    return console.log('cookie injected');
+
                 } else {
                     //query server
                     $.ajax('/debugging/'+ e.target.getAttribute('data-buttonId'), {
@@ -68,6 +72,7 @@
                         },
                         error: function(jqXHR, status, error){
                             $('#results').html(error);
+                            console.log(Error(error));
                         }
                     });
                 }

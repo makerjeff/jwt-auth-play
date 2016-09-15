@@ -20,8 +20,8 @@ var port            = process.env.PORT || 3000;
 // ==============================
 
 var User            = require('./models/users');    //user schema
-var sillyText       = require('./models/silly');    //sillyEngines schema
-var data            = fs.readFileSync(__dirname + '/data.json');
+var sillyText       = require('./models/silly');    //sillyEngines
+var startupMessages = require('./models/startup_messages');     //silly startup messages
 
 
 
@@ -41,7 +41,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 // -- cookie parser --
-app.use(cookieParser());
+app.use(cookieParser('mycookiesecret', {signed:true, httpOnly:true, maxAge: 300})); //signed
+
 
 // -- disable stuff --
 //app.disable('x-powered-by');
@@ -60,17 +61,6 @@ var debugRoutes = require('./routes/debug');
 app.use('/debugging', debugRoutes);
 
 
-// -- grab the secret phrase --
-app.get('/secret', function(req,res){
-    var sendObject = [
-        {'buffer':debugRoutes.data},
-        {'string':debugRoutes.stringData},
-        {'json':debugRoutes.parsedData},
-        {'secret':debugRoutes.secret}
-    ];
-    console.log('Sending object full of data.');
-    res.json(JSON.parse(data));
-});
 // -- base route --
 app.get('/', function(req, res){
     //res.send('<h1 style="color:darkgreen; font-family: Arial, sans-serif;"> / route is working.</h1>');
@@ -131,6 +121,8 @@ app.post('/db-tester', function(req,res){
 
 
 
+
+
 // ==============================
 // CATCH-ALLS ===================
 // ==============================
@@ -159,7 +151,7 @@ initialize();
 // ==============================
 function initialize(){
     app.listen(port);
-    console.log('Magic happening on localhost:' + port);
+    console.log(startupMessages.getRandomMessage() + ' on localhost:' + port);
 }
 
 // -- DB tester-ware --
