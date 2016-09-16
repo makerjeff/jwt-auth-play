@@ -125,6 +125,7 @@ app.post('/signup', function(req,res){
 
                 console.log('New user added.'.green);
                 res.json({success:true, flash:'Account added! TODO: redirect to main view!'});
+                //TODO: set cookie and redirect!
             }
         }
 
