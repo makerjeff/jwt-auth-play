@@ -24,6 +24,8 @@ var User            = require('./models/users');    //user schema
 var sillyText       = require('./models/silly');    //sillyEngines
 var startupMessages = require('./models/startup_messages');     //silly startup messages
 
+app.set('dbToken', process.env.DBPASS);             //set the DB encryption token (generated externally with UUID.v4)
+
 // MONGODB ======================
 mongoose.connect('mongodb://localhost/jwt_users');
 
@@ -145,6 +147,7 @@ app.get('/login', function(req,res){
 // -- POST -- verify
 app.post('/login', function(req,res){
     //check to see if user exists.
+    //check for token in cookie, query string, or headers
 
 });
 
