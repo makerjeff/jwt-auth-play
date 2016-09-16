@@ -50,23 +50,51 @@
     //DOC READY
     $(document).ready(function(e){
 
+        // ====================
+        // HANDLES ============
+        // ====================
+
         //NOTE, JQuery creates an array, not a direct reference to the object.
+        var form = $('#signup_form');
+        var email = $('#email');
         var password = $('#pwd');
         var confirm_password = $('#confirm_pwd');
 
-
-        $('#signup_form').on('submit', function(e){
-            e.preventDefault();
-            console.log('submit attempted!');
-            //validatePassword();
-        });
-
+        // ====================
+        // EVENT LISTENERS ====
+        // ====================
         password.on('change', validatePassword);
         confirm_password.on('keyup', validatePassword);
 
 
+        // ====================
+        // SUBMIT FORM ========
+        // ====================
+        form.on('submit', function(e){
+            e.preventDefault();
+            console.log('submit attempted!');
 
-        // DECLARE FUNCTIONS FUNCTIONS
+            $.ajax({
+                type: 'POST',
+                url:'/signup',
+                data: form.serialize(),
+                success: function(response, status, jqXHR){console.log(response);},
+                error: function(jqXHR, status, error){console.log(error);}
+            });
+        });
+
+
+
+
+
+
+        // ====================
+        // FUNCTION DEFS ======
+        // ====================
+
+        /**
+         * Validates that both passwords are the same.
+         */
         function validatePassword(){
             if(password[0].value != confirm_password[0].value){
                 confirm_password[0].setCustomValidity("Passwords don't match!");

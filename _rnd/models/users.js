@@ -4,24 +4,20 @@
 
 //users.js (mongoose)
 
-    //grab mongoose
+    //-- grab mongoose --
 var mongoose = require('mongoose');
 
-//define schema
+//-- define schema --
 var userSchema = mongoose.Schema({
     email: String,
     password: String
 });
 
-// schema methods
-//TODO: bcrypt hash password
-//TODO: bcrypt verify password
+// -- schema methods -- IF ANY
 
-//TODO: encrypt data
-//TODO: decrypt data
 
-// create model
+// -- create model --
 var User = mongoose.model('User', userSchema);
 
-// export module
+// -- export module --
 module.exports = User;

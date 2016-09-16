@@ -10,6 +10,7 @@ var fs              = require('fs');
 var bodyParser      = require('body-parser');
 var cookieParser    = require('cookie-parser');
 var mongoose        = require('mongoose');
+var bcrypt          = require('bcrypt-nodejs');
 
 var app             = express();
 var port            = process.env.PORT || 3000;
@@ -23,6 +24,21 @@ var User            = require('./models/users');    //user schema
 var sillyText       = require('./models/silly');    //sillyEngines
 var startupMessages = require('./models/startup_messages');     //silly startup messages
 
+// MONGODB ======================
+mongoose.connect('mongodb://localhost/jwt_users');
+
+mongoose.connection.on('error', function(err){
+    console.error(('connection error: ' + err).yellow); //catch the mongo connect error
+});
+
+mongoose.connection.on('connected', function(){
+    console.log('Database connected.'.blue);
+});
+
+mongoose.connection.on('disconnected', function(){
+    console.log('Database connection disconnected.'.red);
+});
+
 
 
 
@@ -30,11 +46,7 @@ var startupMessages = require('./models/startup_messages');     //silly startup 
 // MIDDLEWARE ===================
 // ==============================
 
-// -- jeff logger --
-app.use(function(req, res, next){
-    console.log('request: ' + req.url + ' : ' + Date().yellow);
-    next();
-});
+
 
 // -- body parser --
 app.use(bodyParser.json());
@@ -48,6 +60,20 @@ app.use(cookieParser('mycookiesecret', {signed:true, httpOnly:true, maxAge: 300}
 //app.disable('x-powered-by');
 app.use(function(req,res,next){
     res.setHeader('X-Powered-By', sillyText.getEngine());
+    next();
+});
+
+// -- jeff logger --
+app.use(function(req, res, next){
+    if(req.method == 'GET'){
+        console.log('Method: '.blue + req.method.green + ', URL: '.blue + req.url.green + ' ::: ' + Date().yellow);
+    }
+    else if(req.method == 'POST') {
+        console.log('Method: '.blue + req.method.green + ', URL: '.blue + req.url.green + ', User: '.blue + colors.green(req.body.email) + ' ::: ' + Date().yellow);
+    } else {
+        console.log('unrecognized request type'.red);
+    }
+
     next();
 });
 
@@ -76,6 +102,35 @@ app.get('/signup', function(req,res){
     res.sendFile(__dirname + '/public/signup.html');
 
 });
+// -- POST -- create user (if user doesn't exist);
+app.post('/signup', function(req,res){
+    //check to see if user exists, if it does, return data object with success: false
+    User.findOne({email:req.body.email}, function(err, user){
+        if(err){
+            //database error
+            console.log(Error(err));
+            res.json({success:false, flash: 'Error with fetching data!'});
+        } else {
+            if(user){
+                //if user exists
+                console.log('User already exists.'.red);
+                res.json({success: false, flash: 'User already existssss.'});
+            } else {
+                // add new user block
+                new User({
+                    email: req.body.email,
+                    password: bcrypt.hashSync(req.body.pwd)
+                }).save();
+                // add new user block -- END
+
+                console.log('New user added.'.green);
+                res.json({success:true, flash:'Account added! TODO: redirect to main view!'});
+            }
+        }
+
+    });
+
+});
 
 // ======================
 // LOGIN ================
@@ -92,6 +147,19 @@ app.post('/login', function(req,res){
 
 });
 
+// =======================
+// LOGOUT ================
+// =======================
+
+// dump the token cookie
+// redirect to login page
+
+app.get('/logout', function(req,res){
+
+    res.clearCookie('token');       //dumps the token on the browser
+    res.redirect('/login');         //redirects to login TODO: send JSON message to front end
+});
+
 
 // =======================
 // TEST ROUTES ===========
@@ -100,7 +168,7 @@ app.post('/login', function(req,res){
 app.get('/db-tester', routeMiddleware, function(req,res){
     //grab user's cookies and display them
     //res.json(req.cookies);
-    console.log('data sent: ' + req.cookies.data);
+    console.log('token: ' + req.signedCookies.token);
 
     var dummyData = {'username':'jimbop@gmail.com', 'data': [
         {'name':'note1', 'data':'I am wonderful. How is that for a note?'},
@@ -158,11 +226,10 @@ function initialize(){
 function routeMiddleware(req, res, next){
 // functions as a gateway. If token doesn't exist, thou shall not pass.
     //
-    if(!req.cookies.data) {
+    if(!req.signedCookies.token) {
         console.log('no cookie present.');
         return res.json({message: 'You\'re a lying cheating bastard. You didn\'t come with authorized cookies. '});
     } else {
-        console.log('this is working. Use this to check for credentials. ' + req.cookies.data);
         return next();
     }
 }

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0 user-scalable=no">
+
+    <title>rnd main</title>
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/bootstrap.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1><span class="fa fa-sign-in"></span> Main Page</h1>
+
+
+    <br>
+    <div class="pull-right"><a href="/logout">Logout</a></div>
+</div>
+
+
+<script>
+
+    //ready
+    $(document).ready(function(e){
+        console.log('document is ready.');
+
+        $('#form1').on('submit', function(e){
+            e.preventDefault(); //restricts form submission
+
+            var emailField = $('#email').value;
+            var pwdField = $('#pwd').value;
+
+            //TODO: AJAX to check if a user exists
+            $.ajax('/db-tester', {
+                type: 'GET',
+                success:function(data, status, jqXHR){
+
+                    updatePage(data);
+                },
+                error: function(jqXHR, status, error){
+                    console.log('error! ' + Error(error));
+
+                }
+            });
+        });
+
+
+    });
+
+    window.addEventListener('DOMContentLoaded', function(e){
+        console.log('This should pop up before anything else.');
+    });
+
+    // FUNCTIONS
+    // TODO: move this to external JS file, AND FOR THE LIFE OF PI, USE TEMPLATING!
+    // DO NOT USE .innerHTML.  Instead, use .innerText, .value, .textContent.
+
+    // temporary page-updater, pre-populated with non-Handlebars code.
+    function updatePage(data){
+
+        if(data.message){
+            $('.container').html('<h1>' + data.message + '</h1>');
+        } else {
+
+            $('.container').html('<h1>User logged in!</h1>' + '<p>' + data.username + '</p>');
+
+            data.data.forEach(function(elem, arr, ind){
+                console.log(elem.data);
+                $('.container').append('<p> <span class="fa fa-sign-in"></span> ' + elem.data + '</p>');
+            });
+        }
+    }
+
+    function injectCookie(){
+        //set the cookie
+        document.cookie = 'data={' + data.data + '}';
+    }
+
+
+</script>
+
+</body>
+</html>
