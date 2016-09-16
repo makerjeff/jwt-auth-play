@@ -21,6 +21,8 @@
         <button id="uuid_button" class="btn btn-primary" data-buttonId="uuid">uuid</button>
         <button id="jwt_button" class="btn btn-success" data-buttonId="jwt">jwt</button>
         <button id="next_button" class="btn btn-sm" data-buttonId="next">></button>
+        <button id="login_button" class="btn btn-small pull-right" data-buttonId="login"><span class="fa fa-sign-in"></span> Login</button>
+        <button id="cookie_injector" class="btn btn-small pull-right" data-buttonId="cookie_injector"><span class="fa fa-bug"> Cookies</span></button>
     </div>
 
     <div id="results">
@@ -46,23 +48,36 @@
 
         //buttons with loop
         $('button').on('click', function(e){
-            console.log('clicked ' + e.target.id + ' named: "' + e.target.innerHTML + '"');
+            //console.log('clicked ' + e.target.id + ' named: "' + e.target.innerHTML + '"');
 
-                $.ajax('/debugging/'+ e.target.getAttribute('data-buttonId'), {
-                    type: 'GET',
-                    success: function(data, status, jqXHR){
-                        $('#results').html('<pre>' + data + '</pre>');
+                //check for 'login' button
+                if(e.target.id === 'login_button') {
+                    return window.location.href="/login";
+                }
+                else if(e.target.id === 'cookie_injector'){
+                    return console.log('cookie injected');
 
-                        //if jwt button
-                        if(e.target.id == 'jwt_button'){
-                            //set cookie
+                } else {
+                    //query server
+                    $.ajax('/debugging/'+ e.target.getAttribute('data-buttonId'), {
+                        type: 'GET',
+                        success: function(data, status, jqXHR){
+                            $('#results').html('<pre>' + data + '</pre>');
+
+                            //if jwt button
+                            if(e.target.id == 'jwt_button'){
+                                //set cookie
+                            }
+
+                        },
+                        error: function(jqXHR, status, error){
+                            $('#results').html(error);
+                            console.log(Error(error));
                         }
+                    });
+                }
 
-                    },
-                    error: function(jqXHR, status, error){
-                        $('#results').html(error);
-                    }
-                });
+
         });
     });
 
