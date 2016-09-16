@@ -89,7 +89,7 @@ app.post('/login', function(req,res){
 
 });
 
-// -- DB TESTER ROUTER --
+// -- DB TESTER ROUTE --
 app.get('/db-tester', function(req,res){
     //grab user's cookies and display them
     //res.json(req.cookies);
