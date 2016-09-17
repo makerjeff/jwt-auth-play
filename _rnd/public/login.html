@@ -52,13 +52,23 @@
             var pwdField = $('#pwd').value;
 
             //TODO: AJAX to check if a user exists
-            $.ajax('/db-tester', {
-                type: 'GET',
+            $.ajax({
+                type: 'POST',
+                url: '/login',
                 success:function(data, status, jqXHR){
 
-                    updatePage(data);
+                    if(data.success == true){
+                        console.log('successfully logged in!');
+                        updatePage(data);
+                    } else {
+                        console.log('login was unsuccessful.');
+                        updatePage(data);
+                    }
+
+                    //updatePage(data);
                 },
                 error: function(jqXHR, status, error){
+                    //if XHR fails.
                     console.log('error! ' + Error(error));
 
                 }
@@ -92,10 +102,13 @@
         }
     }
 
-    function injectCookie(){
-        //set the cookie
-        document.cookie = 'data={' + data.data + '}';
+
+    function flashMessageHandler(resObject){
+        //TODO: implement flash message handler
+
     }
+
+
 
 
 </script>

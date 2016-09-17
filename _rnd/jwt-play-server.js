@@ -95,12 +95,27 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/public/index.html');
 });
 
+// -- token checker --
+
+// API route to check for cookies, following ajax request to inject cookies.
+app.get('/checker', function(req,res){
+
+    if(req.signedCookies.token){
+        //res.redirect('/main');    TODO: not needed for ajax checker
+        console.log('cookie exists!');
+
+    } else {
+        console.log('Cookie does not exist, must log in, redirecting to login page.');
+    }
+});
+
 // ======================
 // SIGNUP ===============
 // ======================
 // -- GET -- load the page
 app.get('/signup', function(req,res){
     //TODO: if token exists, redirect to data-page (or alert front end)
+
     res.sendFile(__dirname + '/public/signup.html');
 
 });
@@ -126,8 +141,9 @@ app.post('/signup', function(req,res){
                 // add new user block -- END
 
                 console.log('New user added.'.green);
-                res.json({success:true, flash:'Account added! TODO: redirect to main view!'});
-                //TODO: set cookie and redirect!
+
+                //res.json({success:true, flash:'Account added! TODO: redirect to main view!'});
+                res.redirect('/main');
             }
         }
 
@@ -141,15 +157,68 @@ app.post('/signup', function(req,res){
 // -- GET -- returns page
 
 app.get('/login', function(req,res){
-    res.sendFile(__dirname + '/public/login.html');
+
+
+    if(req.signedCookies.token){
+        res.redirect('/main');
+        console.log('cookie already exists!');
+
+    } else {
+        console.log('Cookie does not exist, must log in, redirecting to login page.');
+        res.sendFile(__dirname + '/public/login.html');
+
+    }
 });
 
 // -- POST -- verify
 app.post('/login', function(req,res){
-    //check to see if user exists.
-    //check for token in cookie, query string, or headers
+    //check to see if there's already a token
+
+        //check to see if user exists.
+        //check for token in cookie, query string, or headers
+        User.findOne({email:req.body.email}, function(err, user){
+            if(err){
+                console.log(Error(err));
+                res.json({success:false, flash:'An error has occured: ' + err});
+            } else {
+                //if user exists and password matches
+                if(user) {
+
+                    console.log('User ' + req.body.email + ' found. Checking password...');
+
+                    if(bcrypt.compareSync(req.body.pwd, user.email)){
+
+                        console.log('password is correct! setting cookie with token.');
+
+                        var token = jwt.sign({email:userId.email}, process.env.DBPASS, {algorithm: 'HS256', expiresIn: '5m'});
+
+                        //check to see what the token looks like
+                        res.cookie('token', token, {signed:true, httpOnly:true});
+
+                        console.log('User ' + user.email + ' logged in. ');
+
+
+                        //res.redirect('/main'); //TODO: remove this once it's in the app.
+                    }
+                }
+
+            }
+
+
+
+        });
+
+
 
 });
+
+// =======================
+// MAIN VIEW =============
+// =======================
+app.get('/main', routeMiddleware, function(req,res){
+    res.sendFile(__dirname + '/public/main.html');
+});
+
 
 // =======================
 // LOGOUT ================
@@ -161,7 +230,9 @@ app.post('/login', function(req,res){
 app.get('/logout', function(req,res){
 
     res.clearCookie('token');       //dumps the token on the browser
+    //res.json({success: true, flash: 'user has logged out'});
     res.redirect('/login');         //redirects to login TODO: send JSON message to front end
+    console.log('A user logged out');
 });
 
 
@@ -245,4 +316,14 @@ function isAuthenticated(req,res,next) {
     //... check req.cookies for token
     //... check DB for user in that token
     //... check
+}
+
+function setToken( res, userId, key ){
+    res.cookie('token', jwt.sign(
+        {email:userId.email}, process.env.DBPASS, {algorithm: 'HS256', expiresIn: '5m'}),
+        {signed:true, httpOnly:true});
+}
+
+function createToken(){
+    
 }

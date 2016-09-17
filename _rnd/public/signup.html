@@ -36,6 +36,15 @@
 
         <button type="submit" class="btn btn-primary btn-block">Submit</button>
 
+        <br>
+
+        <!-- ALERT MESSAGE -->
+        <div class="alert alert-danger fade in">
+            <a href="#" class="close" data-dismiss="alert">&times;</a>
+            User already exists! (not really, just a test message).
+        </div>
+        <!-- ALERT MESSAGE - END -->
+
     </form>
 
     <br>
@@ -78,8 +87,13 @@
                 type: 'POST',
                 url:'/signup',
                 data: form.serialize(),
-                success: function(response, status, jqXHR){console.log(response);},
-                error: function(jqXHR, status, error){console.log(error);}
+                success: function(response, status, jqXHR){
+                    console.log(response);
+                    window.location.href = '/login';
+                },
+                error: function(jqXHR, status, error){
+                    console.log(error);
+                }
             });
         });
 
@@ -103,6 +117,7 @@
                 console.log('password matches, ready to send to API!');
             }
         }
+
     });
 
 

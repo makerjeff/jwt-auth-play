@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0 user-scalable=no">
+
+    <title>rnd cookie injector</title>
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/bootstrap.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1><span class="fa fa-cutlery"></span> Cookie Injector</h1>
+
+    <button id="ajax_cookie_button" class="btn btn-info btn-block"> set cookie through ajax </button>
+    <button id="ajax_cookie_check" class="btn btn-success btn-block"> check cookie through ajax </button>
+    <button id="delete_cookie" class="btn btn-danger btn-block ">delete cookie</button>
+
+
+    <br>
+    <div class="pull-right"><a href="/logout">Logout</a></div>
+</div>
+
+
+<script>
+
+    //ready
+    $(document).ready(function(e){
+    // make stuff happen here
+
+        var button1 = $('#ajax_cookie_button');
+        var button2 = $('#ajax_cookie_check');
+        var button3 = $('#delete_cookie');
+
+        button1.on('click', function(e){
+            $.ajax({
+                type: 'GET',
+                url: '/debugging/injectcookie',
+                success: function(data, status, jqXHR){
+                    console.log('Ajax made, let us see if cookies can be set this way');
+                },
+                error: function(jqXHR, status, error){
+                    console.log(Error(error));
+                }
+            });
+        });
+
+        button2.on('click', function(e){
+            $.ajax({
+                type: 'GET',
+                url: '/checker',
+                success: function(data, status, jqXHR){
+                    console.log('AJAX mic check.');
+                },
+                error: function(jqXHR, status, error){console.log(Error(error))}
+            });
+        });
+
+        button3.on('click', function(e){
+            $.ajax({
+                type: 'GET',
+                url: '/logout',
+                success: function(data, status, jxXHR){
+                    console.log('Deleting cookie.');
+                },
+                error: function(jqXHR, status, error){console.log(Error(error))}
+            });
+
+
+        });
+
+    });
+
+
+
+</script>
+
+</body>
+</html>

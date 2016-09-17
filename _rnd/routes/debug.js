@@ -35,10 +35,9 @@ router.get('/injectcookie', function(req,res){
     res.cookie('token', jwt.sign(
         {'username':'monkeypoo', 'email':'monkeypoo@gmail.com'}, process.env.DBPASS, {algorithm: 'HS256', expiresIn: '5m'}),
         {signed:true, httpOnly:true});
-    // res.cookie('monkeyData', 'a6501a30-b434-4e65-82fb-e54f08a9484d', {signed: true, httpOnly:true});
-    // res.cookie('monkeyData2', 'some other random value of stuff', {signed: true});
-    // res.cookie('monkeyDataNumber', 30000, {signed:true, httpOnly:true});
-    res.redirect('/login');
+
+    res.json({success: true, flash: 'Cookie injected.'});
+    //res.redirect('/checker'); //THIS IS REQUIRED FOR AJAX COOKIE SETTING
 });
 // -- test signed cookie consumption --
 router.get('/consumecookie', function(req,res){
