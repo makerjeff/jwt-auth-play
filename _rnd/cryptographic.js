@@ -69,12 +69,10 @@ function bcryptHashSync(textString){
 //enable Prompt.
 prompt.start();
 
-// prompt.get(['username','email'], function(err,result){
-//     console.log('Command-line input received: ');
-//     console.log('username: '.yellow + result.username);
-//     console.log('email: '.yellow + result.email);
-// });
 
+// --------------------------------
+// ENCRYPT MODE -------------------
+// --------------------------------
 if(mode == 'ENCRYPT'){
     //advanced Prompt options in object array
     prompt.get([
@@ -105,6 +103,9 @@ if(mode == 'ENCRYPT'){
 
 }
 
+// --------------------------------
+// DECRYPT MODE -------------------
+// --------------------------------
 else if(mode == 'DECRYPT') {
     prompt.get([
         {name: 'hashies', description: 'Enter a hash: ', type: 'string'},
@@ -116,23 +117,26 @@ else if(mode == 'DECRYPT') {
     });
 }
 
+// --------------------------------
+// STORE TO DB MODE ---------------
+// --------------------------------
 else if(mode == 'STORE') {
 
-
+    // -- USER PROMPT
     prompt.get([
         {name: 'username', description: 'Enter a username: ', type: 'string', required: true},
         {name: 'email', description: 'Enter your email: ', type: 'string', required: true},
         {name: 'password', description: 'Enter a password: ', type: 'string', hidden:true, required: true}
     ], function(err, result){
 
-        //connect to db
+        // -- connect to db --
         MongoClient.connect(url, function(err, db){
             if(err){
                 console.log('Unable to connect to the database. Error: ' + err);
             } else {
                 console.log('Connection to ' + url.green + ' established.');
 
-                //store to db, then close DB.
+                // -- store to db --
                 var collection = db.collection('users');
                 var user = {
                     username: encrypt(result.username, defaultPassword),    //TODO: switch to result.passwd
@@ -140,6 +144,7 @@ else if(mode == 'STORE') {
                     password: bcryptHashSync(result.password)
                 };
 
+                // -- insert the entry --
                 collection.insert(user, function(err, result){
                     if(err){
                         console.log(err);
@@ -148,7 +153,9 @@ else if(mode == 'STORE') {
                     }
                 });
 
+                // -- close the DB --
                 db.close();
+                console.log('Connection to ' + url.green + ' disconnected');
             }
         });
 

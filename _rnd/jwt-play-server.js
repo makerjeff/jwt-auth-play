@@ -24,7 +24,7 @@ var User            = require('./models/users');    //user schema
 var sillyText       = require('./models/silly');    //sillyEngines
 var startupMessages = require('./models/startup_messages');     //silly startup messages
 
-app.set('dbToken', process.env.DBPASS);             //set the DB encryption token (generated externally with UUID.v4)
+checkForCredentials();  //runs credential checker
 
 // MONGODB ======================
 mongoose.connect('mongodb://localhost/jwt_users');
@@ -295,6 +295,20 @@ initialize();
 function initialize(){
     app.listen(port);
     console.log(startupMessages.getRandomMessage() + ' on localhost:' + port);
+}
+
+// -- check to see if credentials are passed in, if not, return error.
+function checkForCredentials(){
+
+    if(!process.env.DBPASS) {
+        return console.log('No DB credentials in environmental variables. Use "DBPASS=<credentials>".'.bgRed.black);
+    } else {
+        //if it exists, then set the token globally.
+        app.set('dbToken', process.env.DBPASS);             //set the DB encryption token (generated externally with UUID.v4)
+    }
+
+
+
 }
 
 // -- DB tester-ware --
