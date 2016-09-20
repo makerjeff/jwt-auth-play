@@ -25,7 +25,8 @@ Playing with JSON Web Tokens authorization.
 - [How Timestamps help in preventing 'Replay Attacks'](http://stackoverflow.com/questions/10022053/how-does-timestamp-helps-in-preventing-replay-attacks-in-webservices): Consider implementing this.
 - [REST Securit CheatSheet](https://www.owasp.org/index.php/REST_Security_Cheat_Sheet): READ AS BIBLE.
 - [Route Middleware to Check if a User is Authenticated in Node.js](https://scotch.io/tutorials/route-middleware-to-check-if-a-user-is-authenticated-in-node-js)
-- [Templating with Handlebars(frontend)](http://www.korenlc.com/handlebars-js-tutorial-templating-with-handlebars/):
+- [Templating with Handlebars(frontend)](http://www.korenlc.com/handlebars-js-tutorial-templating-with-handlebars/)
+- [Image Magick: Convert PNG to ICO](https://sethvargo.com/install-imagemagick-on-osx-lion/)
 
 ## NOTES
 - **Basic Signup Flow**:
