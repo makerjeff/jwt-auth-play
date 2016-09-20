@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0 user-scalable=no">
+
+    <title>Modularity</title>
+
+<!--TODO: THIS IS NOT WORKING -->
+
+
+    <!-- MODULES -->
+    <script src="lib/jquery.js"></script>
+    <script src="lib/bootstrap.js"></script>
+    <script src="lib/handlebars.min.js"></script>
+    <script src="js/randocfun.js"></script>
+
+
+    <!-- TEMPLATES -->
+    <script id="nurseryRhymeTemplate" type="text/x-handlebars-template">
+        Marry had a little <b>\{{animal}}</b>, its <b>\{{bodyPart}}</b>
+        was <b>\{{adjective}}</b> as <b>\{{noun}}</b>.
+    </script>
+
+
+
+    <!--MAIN SCRIPT-->
+    <script src="js/modularity.js"></script>
+
+    <!-- STYLES -->
+    <link  rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <link rel="icon" href="favicon.ico?v=2.1">
+</head>
+<body>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+    <h1 class="text-center"><span class="fa fa-puzzle-piece"></span> Modularity</h1>
+
+    <form id="add_form" action="https://52.35.91.192">
+        <div class="form-group">
+            <label for="user"> Name</label>
+            <!-- INPUT GROUPS -->
+            <div class="input-group">
+                <input id="add_input" type="text" class="form-control" id="user" name="user" placeholder="add a name" autofocus autocomplete="off" required>
+                <span class="input-group-btn">
+                    <button id="add_button" class="btn btn-default"> <span class="fa fa-plus"></span></button>
+                </span>
+            </div>
+        </div>
+    </form>
+
+    <div id="resultsContainer" class="container">
+        <div id="infotext">info here</div>
+        <ul id="results_UL">
+
+        </ul>
+    </div>
+
+</div>
+
+
+
+</body>
+</html>

@@ -292,12 +292,16 @@ initialize();
 // ==============================
 // FUNCTIONS ====================
 // ==============================
+/**
+ * Initialize the program.
+ */
 function initialize(){
     app.listen(port);
     console.log(startupMessages.getRandomMessage() + ' on localhost:' + port);
 }
 
 // -- check to see if credentials are passed in, if not, return error.
+
 function checkForCredentials(){
 
     if(!process.env.DBPASS) {
