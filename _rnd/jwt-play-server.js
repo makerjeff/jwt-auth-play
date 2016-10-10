@@ -11,6 +11,7 @@ var bodyParser      = require('body-parser');
 var cookieParser    = require('cookie-parser');
 var mongoose        = require('mongoose');
 var bcrypt          = require('bcrypt-nodejs');
+var prompt          = require('prompt');
 
 var app             = express();
 var port            = process.env.PORT || 3000;
@@ -305,7 +306,8 @@ function initialize(){
 function checkForCredentials(){
 
     if(!process.env.DBPASS) {
-        return console.log('No DB credentials in environmental variables. Use "DBPASS=<credentials>".'.bgRed.black);
+        console.log('No DB credentials in environmental variables. Use "DBPASS=<credentials>".'.bgRed.black);
+        return process.exit(0);    //exit application, 0 = success, 1 = error.
     } else {
         //if it exists, then set the token globally.
         app.set('dbToken', process.env.DBPASS);             //set the DB encryption token (generated externally with UUID.v4)
