@@ -3,10 +3,12 @@
  */
 //modular.js
 
-//template stuff TODO: move within module.
+//template stuff : TODO updating to work like sitepoint tutorial.
+var baseTemplate
+
 var nurseryRhymeTemplate = Handlebars.compile($('#nurseryRhymeTemplate').html());   //compile template
 var $results = $('#resultsContainer');   //set results container
-var $infotext = $('#infotext');
+//var $infotext = $('#infotext');
 
 // Document 'Rapper'
 $(document).ready(function(e){
@@ -17,8 +19,8 @@ $(document).ready(function(e){
     //TEMP: TODO: remove
     $('#add_button').on('click', function(e){
         e.preventDefault();
-        console.log('this is working.');
-        //console.log(nurseryRhymeTemplate);
+        //console.log('this is working.');
+        console.log(nurseryRhymeTemplate);
 
         // $results.html(nurseryRhymeTemplate({
         //     animal:'zeebra',
@@ -27,7 +29,7 @@ $(document).ready(function(e){
         //     noun: 'a rocket'
         // }));
 
-        $infotext.html('<h1>This is working</h1>');
+        $('#infotext').html('<h1>This is working</h1>');
     });
 
 
