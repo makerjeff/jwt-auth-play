@@ -6,6 +6,9 @@ Playing with JSON Web Tokens authorization.
 - Adding a bare bones login system to "_rnd".
 - NOTE!: In order to set a cookie through AJAX, there needs to be a response. **Res.JSON({success: true, flash: 'got stuff'})** would work.
 
+## Run
+    PORT=3000 DBPASS='(insert DB pass here)' nodemon jwt-play-server.js
+
 ## Dependencies
 - JQuery
 - Bootstrap
